@@ -35,7 +35,7 @@ class FailureWidget extends StatelessWidget {
             SizedBox(
                 height: 50,
                 child: CustomTextButton(
-                  text: 'اضغط لاعادة المحاولة',
+                  text: 'Click Here To Try Again',
                   buttonColor: Colors.blue,
                   textColor: Colors.white,
                   topRight: 10,
