@@ -37,7 +37,7 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
         } else if (value.property == 'Size') {
           properties[0].isExist = true;
           properties[0].propertyIndex = key;
-        } else if (value.property == 'Material') {
+        } else if (value.property == 'Materials') {
           properties[2].isExist = true;
           properties[2].propertyIndex = key;
         }

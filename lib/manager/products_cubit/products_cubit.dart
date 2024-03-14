@@ -17,7 +17,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
     emit(GetProductsLoadingState());
 
     try {
-      var response = await DioHelper.get(query: {'page': 5, 'limit': 10});
+      var response = await DioHelper.get(query: {'page': 2, 'limit': 10});
 
       response.data['data'].forEach((element) {
         Map<String, dynamic> data = {
