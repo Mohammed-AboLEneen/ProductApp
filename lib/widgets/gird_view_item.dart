@@ -16,9 +16,13 @@ class GridViewItem extends StatelessWidget {
       onTap: () {
         Navigator.push(context, PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
-          return ProductItemScreen(
-            id: '${product.data?.id}',
-          );
+          return AnimatedOpacity(
+              duration: const Duration(milliseconds: 400),
+              opacity: animation.value,
+              child: SlideTransition(
+                  position: animation.drive(Tween<Offset>(
+                      begin: const Offset(0, -1), end: Offset.zero)),
+                  child: ProductItemScreen(id: '${product.data?.id}')));
         }));
       },
       child: Padding(

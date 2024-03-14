@@ -1,13 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:splash_app/errors/server_failure.dart';
 import 'package:splash_app/manager/product_item_screen_cubit/product_item_screen_states.dart';
-import 'package:splash_app/manager/products_cubit/products_states.dart';
 import 'package:splash_app/models/custom_variation_model.dart';
 import 'package:splash_app/models/product_model.dart';
-
-import '../../models/property_model.dart';
 import '../../utils/dio_helper.dart';
 
 class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
@@ -36,22 +32,18 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
       selectedSize = customVariations[0].sizes != null ? 0 : null;
       selectedMaterial = customVariations[0].materials != null ? 0 : null;
 
-      print('data: ');
-      for (var element in customVariations) {
-        print(element.sizes);
-        print(element.materials);
-        print(element.color);
-        print('\n');
-      }
+      print(
+          'data: ${customVariations.length} ::: ${product.data?.variations?.length}');
       emit(GetProductItemSuccessState());
     } catch (e) {
       if (e is DioException) {
         var error = ServerFailure.dioError(e);
         emit(GetProductItemFailureState(error.message));
+      } else {
+        emit(GetProductItemFailureState('SomeThing is Wrong'));
       }
 
       print(e.toString());
-      emit(GetProductItemFailureState('SomeThing is Wrong'));
     }
   }
 
@@ -68,6 +60,7 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
           variationMaterial = e.value;
         } else {
           variationColor = e.value;
+          print(variationColor);
         }
       });
       if (customVariations.isEmpty) {
@@ -97,11 +90,14 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
           }
 
           // if not found create new variation.
-          customVariations.add(CustomVariationModel(
-              color: variationColor,
-              price: element.value.price,
-              materials: [variationMaterial],
-              sizes: [variationSize]));
+
+          if (i == 0) {
+            customVariations.add(CustomVariationModel(
+                color: variationColor,
+                price: element.value.price,
+                materials: [variationMaterial],
+                sizes: [variationSize]));
+          }
         }
       }
     });

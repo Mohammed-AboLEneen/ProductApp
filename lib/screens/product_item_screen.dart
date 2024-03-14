@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:splash_app/manager/product_item_screen_cubit/product_item_screen_cubit.dart';
@@ -11,6 +11,7 @@ import '../constents.dart';
 import '../manager/product_item_screen_cubit/product_item_screen_states.dart';
 import '../methods/hex_to_color.dart';
 import '../widgets/cached_image_view_item.dart';
+import '../widgets/custom_expension_panal_list.dart';
 import '../widgets/failure_widget.dart';
 
 class ProductItemScreen extends StatefulWidget {
@@ -42,8 +43,25 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
       child: BlocConsumer<ProductItemScreenCubit, ProductItemScreenStates>(
         builder: (context, state) {
           var cubit = ProductItemScreenCubit.get(context);
-          if (state is GetProductItemSuccessState ||
-              state is ChangeVariationState) {
+          if (state is GetProductItemFailureState) {
+            return FailureWidget(
+              errorMessage: state.error,
+              onPressed: () {
+                cubit.getProductItem(widget.id);
+              },
+            );
+          } else if (state is GetProductItemLoadingState) {
+            return Center(
+                child: SizedBox(
+              width: MediaQuery.sizeOf(context).width * .3,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: const LinearProgressIndicator(
+                  color: Colors.teal,
+                ),
+              ),
+            ));
+          } else {
             return Scaffold(
               backgroundColor: mainColor,
               body: SafeArea(
@@ -55,9 +73,14 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                       children: [
                         Row(
                           children: [
-                            const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
                             ),
                             Expanded(
                               child: Align(
@@ -408,75 +431,9 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                 ),
               ),
             );
-          } else if (state is GetProductItemFailureState) {
-            return FailureWidget(
-              errorMessage: state.error,
-              onPressed: () {
-                cubit.getProductItem(widget.id);
-              },
-            );
-          } else {
-            return const Center(
-                child: CircularProgressIndicator(
-              color: Colors.white,
-            ));
           }
         },
         listener: (context, state) {},
-      ),
-    );
-  }
-}
-
-class CustomExpensionPanelList extends StatefulWidget {
-  final String description;
-
-  const CustomExpensionPanelList({super.key, required this.description});
-
-  @override
-  State<CustomExpensionPanelList> createState() =>
-      _CustomExpensionPanalListState();
-}
-
-class _CustomExpensionPanalListState extends State<CustomExpensionPanelList> {
-  bool Expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: ExpansionPanelList(
-        expansionCallback: (panelIndex, isExpanded) {
-          setState(() {
-            Expanded = isExpanded;
-            print(isExpanded);
-          });
-        },
-        children: [
-          ExpansionPanel(
-            isExpanded: Expanded,
-            backgroundColor: Colors.teal,
-            headerBuilder: (context, isExpanded) => ListTile(
-              title: Text(
-                'Description',
-                style: GoogleFonts.cairo()
-                    .copyWith(fontSize: 18, color: Colors.white),
-              ),
-              trailing: Icon(
-                isExpanded ? Icons.expand_less : Icons.expand_more,
-              ),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                widget.description ?? 'No Description',
-                style: GoogleFonts.cairo()
-                    .copyWith(color: Colors.white, fontSize: 18),
-              ),
-            ),
-          )
-        ],
       ),
     );
   }

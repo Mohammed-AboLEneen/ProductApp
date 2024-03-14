@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:splash_app/manager/products_cubit/products_cubit.dart';
-import 'package:splash_app/models/product_model.dart';
-import 'package:splash_app/screens/product_item_screen.dart';
+
+import 'package:splash_app/screens/skelaton_product_screen.dart';
 
 import '../constents.dart';
 import '../manager/products_cubit/products_states.dart';
@@ -72,11 +71,7 @@ class ProductsScreen extends StatelessWidget {
                 },
               );
             } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              );
+              return const SkelatonProductScreen();
             }
           }),
     );
