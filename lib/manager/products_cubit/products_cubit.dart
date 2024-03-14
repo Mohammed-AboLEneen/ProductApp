@@ -17,17 +17,13 @@ class ProductsCubit extends Cubit<ProductsStates> {
     emit(GetProductsLoadingState());
 
     try {
-      var response = await DioHelper.get(query: {'page': 1, 'limit': 10});
+      var response = await DioHelper.get(query: {'page': 5, 'limit': 10});
 
       response.data['data'].forEach((element) {
         Map<String, dynamic> data = {
           'data': element,
         };
         product.add(Product.fromJson(data));
-
-        print(
-            'image : ${element['ProductVariations'][0]['ProductVarientImages'][0]['image_path']}');
-        print(product[0].data!.variations?[0].id);
       });
 
       emit(GetProductsSuccessState());

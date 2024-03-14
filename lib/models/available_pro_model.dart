@@ -1,7 +1,8 @@
 class AvaiableProperties {
   AvaiableProperties({
     String? property,
-    List<Values>? values,}){
+    List<Values>? values,
+  }) {
     _property = property;
     _values = values;
   }
@@ -15,17 +16,20 @@ class AvaiableProperties {
       });
     }
   }
+
   String? _property;
   List<Values>? _values;
 
   String? get property => _property;
+
   List<Values>? get values => _values;
 }
 
 class Values {
   Values({
     String? value,
-    num? id,}){
+    num? id,
+  }) {
     _value = value;
     _id = id;
   }
@@ -34,7 +38,11 @@ class Values {
     _value = json['value'];
     _id = json['id'];
   }
+
   String? _value;
   num? _id;
 
+  String? get value => _value;
+
+  num? get id => _id;
 }

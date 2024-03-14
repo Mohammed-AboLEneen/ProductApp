@@ -49,7 +49,7 @@ class GridViewItem extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10, right: 5),
                       child: Text(
                         '${product.data!.name}',
                         maxLines: 2,
