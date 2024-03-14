@@ -17,6 +17,8 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
 
   late Product product;
   int selectedVariation = 0;
+  int? selectedSize;
+  int? selectedMaterial;
 
   List<CustomVariationModel> customVariations = [];
 
@@ -30,6 +32,9 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
       print(product.data?.id);
       //product.data.variations..sort((a, b) => int.parse(a.productPropertiesValues, radix: 16).compareTo(int.parse(b, radix: 16)));
       createCustomVariations();
+
+      selectedSize = customVariations[0].sizes != null ? 0 : null;
+      selectedMaterial = customVariations[0].materials != null ? 0 : null;
 
       print('data: ');
       for (var element in customVariations) {
@@ -104,6 +109,8 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
 
   void changeVariation(int index) {
     selectedVariation = index;
+    selectedSize = 0;
+    selectedMaterial = 0;
     emit(ChangeVariationState());
   }
 }

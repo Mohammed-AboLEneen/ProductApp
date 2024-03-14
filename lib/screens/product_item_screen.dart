@@ -222,7 +222,9 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                     child: CircleAvatar(
                                       radius: 20,
                                       backgroundColor:
-                                          Colors.grey.withOpacity(.6),
+                                          cubit.selectedVariation == index
+                                              ? Colors.teal
+                                              : Colors.grey.withOpacity(.7),
                                       child: CircleAvatar(
                                         radius: 17,
                                         backgroundColor: hexToColor(cubit
@@ -265,25 +267,38 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                   height: 40,
                                   child: ListView.builder(
                                     itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.teal,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 10),
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Text(
-                                          cubit
-                                                  .customVariations[
-                                                      cubit.selectedVariation]
-                                                  .sizes?[index] ??
-                                              '-----',
-                                          style: GoogleFonts.cairo().copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                Colors.white.withOpacity(.85),
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (cubit.selectedSize != index) {
+                                            setState(() {
+                                              cubit.selectedSize = index;
+                                            });
+                                          }
+                                        },
+                                        child: AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 600),
+                                          decoration: BoxDecoration(
+                                              color: cubit.selectedSize == index
+                                                  ? Colors.teal
+                                                  : Colors.grey.withOpacity(.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Text(
+                                            cubit
+                                                    .customVariations[
+                                                        cubit.selectedVariation]
+                                                    .sizes?[index] ??
+                                                '-----',
+                                            style: GoogleFonts.cairo().copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  Colors.white.withOpacity(.85),
+                                            ),
                                           ),
                                         ),
                                       );
@@ -327,25 +342,39 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                   height: 40,
                                   child: ListView.builder(
                                     itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.teal,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 10),
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Text(
-                                          cubit
-                                                  .customVariations[
-                                                      cubit.selectedVariation]
-                                                  .materials?[index] ??
-                                              '-----',
-                                          style: GoogleFonts.cairo().copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                Colors.white.withOpacity(.85),
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (cubit.selectedMaterial != index) {
+                                            setState(() {
+                                              cubit.selectedMaterial = index;
+                                            });
+                                          }
+                                        },
+                                        child: AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 600),
+                                          decoration: BoxDecoration(
+                                              color: cubit.selectedMaterial ==
+                                                      index
+                                                  ? Colors.teal
+                                                  : Colors.grey.withOpacity(.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Text(
+                                            cubit
+                                                    .customVariations[
+                                                        cubit.selectedVariation]
+                                                    .materials?[index] ??
+                                                '-----',
+                                            style: GoogleFonts.cairo().copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  Colors.white.withOpacity(.85),
+                                            ),
                                           ),
                                         ),
                                       );
