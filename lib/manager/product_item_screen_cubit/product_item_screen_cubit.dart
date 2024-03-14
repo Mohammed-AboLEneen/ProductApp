@@ -13,14 +13,16 @@ class ProductItemScreenCubit extends Cubit<ProductItemScreenStates> {
   static ProductItemScreenCubit get(context) => BlocProvider.of(context);
 
   late Product product;
+  int selectedVariation = 0;
 
   Future<void> getProductItem(id) async {
     emit(GetProductItemLoadingState());
 
     try {
       var response = await DioHelper.get(endPoint: '$id');
-
-      product = Product.fromJson(response.data['data']);
+      print(id);
+      print(response.data['data']['name']);
+      product = Product.fromJson(response.data);
 
       emit(GetProductItemSuccessState());
     } catch (e) {

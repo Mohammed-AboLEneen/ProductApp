@@ -29,12 +29,17 @@ class Data {
     _type = json['type'];
     _description = json['description'];
 
+    _variations = [];
     if (json['ProductVariations'] != null) {
-      _variations = [];
       json['ProductVariations'].forEach((v) {
         _variations?.add(Variations.fromJson(v));
       });
+    } else {
+      json['variations'].forEach((v) {
+        _variations?.add(Variations.fromJson(v));
+      });
     }
+
     if (json['avaiableProperties'] != null) {
       _avaiableProperties = [];
       json['avaiableProperties'].forEach((v) {
@@ -42,8 +47,12 @@ class Data {
       });
     }
     _brandName = json['brandName'];
-    _brandImage = json['brandImage'];
-    _brandImage = json['Brands']['brand_logo_image_path'];
+
+    if (json['brandImage'] != null) {
+      _brandImage = json['brandImage'];
+    } else {
+      _brandImage = json['Brands']['brand_logo_image_path'];
+    }
   }
 
   num? _id;
