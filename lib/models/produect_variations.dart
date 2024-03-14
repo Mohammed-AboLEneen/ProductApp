@@ -10,7 +10,8 @@ class Variations {
     List<ProductPropertiesValues>? productPropertiesValues,
     String? productStatus,
     bool? isDefault,
-    num? productVariationStatusId,}){
+    num? productVariationStatusId,
+  }) {
     _id = id;
     _price = price;
     _quantity = quantity;
@@ -43,6 +44,7 @@ class Variations {
     _isDefault = json['isDefault'];
     _productVariationStatusId = json['product_variation_status_id'];
   }
+
   num? _id;
   num? _price;
   num? _quantity;
@@ -54,21 +56,30 @@ class Variations {
   num? _productVariationStatusId;
 
   num? get id => _id;
-  num? get price => _price;
-  num? get quantity => _quantity;
-  bool? get inStock => _inStock;
-  List<ProductVarientImages>? get productVarientImages => _productVarientImages;
-  List<ProductPropertiesValues>? get productPropertiesValues => _productPropertiesValues;
-  String? get productStatus => _productStatus;
-  bool? get isDefault => _isDefault;
-  num? get productVariationStatusId => _productVariationStatusId;
 
+  num? get price => _price;
+
+  num? get quantity => _quantity;
+
+  bool? get inStock => _inStock;
+
+  List<ProductVarientImages>? get productVarientImages => _productVarientImages;
+
+  List<ProductPropertiesValues>? get productPropertiesValues =>
+      _productPropertiesValues;
+
+  String? get productStatus => _productStatus;
+
+  bool? get isDefault => _isDefault;
+
+  num? get productVariationStatusId => _productVariationStatusId;
 }
 
 class ProductPropertiesValues {
   ProductPropertiesValues({
     String? value,
-    String? property,}){
+    String? property,
+  }) {
     _value = value;
     _property = property;
   }
@@ -80,4 +91,8 @@ class ProductPropertiesValues {
 
   String? _value;
   String? _property;
+
+  String? get value => _value;
+
+  String? get property => _property;
 }

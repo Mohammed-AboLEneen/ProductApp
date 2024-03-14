@@ -42,7 +42,8 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
       child: BlocConsumer<ProductItemScreenCubit, ProductItemScreenStates>(
         builder: (context, state) {
           var cubit = ProductItemScreenCubit.get(context);
-          if (state is GetProductItemSuccessState) {
+          if (state is GetProductItemSuccessState ||
+              state is ChangeVariationState) {
             return Scaffold(
               backgroundColor: mainColor,
               body: SafeArea(
@@ -174,7 +175,7 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                     height: 10,
                                   ),
                                   Text(
-                                    'EGP ${cubit.product.data?.variations?[cubit.selectedVariation].price ?? '-----'}',
+                                    'EGP ${cubit.customVariations[cubit.selectedVariation].price ?? '-----'}',
                                     style: GoogleFonts.cairo().copyWith(
                                         color: Colors.white, fontSize: 18),
                                   ),
@@ -204,50 +205,47 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                             )
                           ],
                         ),
-                        if (cubit.properties[1].isExist)
+                        if (cubit.customVariations.isNotEmpty &&
+                            cubit.customVariations[0].color != null)
                           Container(
                             height: 50,
                             margin: const EdgeInsets.only(top: 10),
                             child: ListView.builder(
                               itemBuilder: (context, index) {
-                                print(cubit.product.data?.id);
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5.0),
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(.6),
+                                return GestureDetector(
+                                  onTap: () {
+                                    cubit.changeVariation(index);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0),
                                     child: CircleAvatar(
-                                      radius: 17,
-                                      backgroundColor: hexToColor(cubit
-                                              .product
-                                              .data
-                                              ?.avaiableProperties![cubit
-                                                      .properties[1]
-                                                      .propertyIndex ??
-                                                  1]
-                                              .values?[index]
-                                              .value ??
-                                          '000000'),
+                                      radius: 20,
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(.6),
+                                      child: CircleAvatar(
+                                        radius: 17,
+                                        backgroundColor: hexToColor(cubit
+                                                .customVariations[index]
+                                                .color ??
+                                            '000000'),
+                                      ),
                                     ),
                                   ),
                                 );
                               },
-                              itemCount: cubit
-                                      .product
-                                      .data
-                                      ?.avaiableProperties?[
-                                          cubit.properties[1].propertyIndex ??
-                                              1]
-                                      .values
-                                      ?.length ??
-                                  1,
+                              itemCount: cubit.customVariations.length,
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                             ),
                           ),
-                        if (cubit.properties[0].isExist)
+                        if (cubit.customVariations.isNotEmpty &&
+                            (cubit.customVariations[cubit.selectedVariation]
+                                    .sizes?.isNotEmpty ??
+                                false) &&
+                            cubit.customVariations[cubit.selectedVariation]
+                                    .sizes?[0] !=
+                                null)
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Column(
@@ -278,14 +276,9 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                             horizontal: 5),
                                         child: Text(
                                           cubit
-                                                  .product
-                                                  .data
-                                                  ?.avaiableProperties?[cubit
-                                                          .properties[0]
-                                                          .propertyIndex ??
-                                                      0]
-                                                  .values?[index]
-                                                  .value ??
+                                                  .customVariations[
+                                                      cubit.selectedVariation]
+                                                  .sizes?[index] ??
                                               '-----',
                                           style: GoogleFonts.cairo().copyWith(
                                             fontWeight: FontWeight.bold,
@@ -296,13 +289,9 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                       );
                                     },
                                     itemCount: cubit
-                                            .product
-                                            .data
-                                            ?.avaiableProperties?[cubit
-                                                    .properties[0]
-                                                    .propertyIndex ??
-                                                1]
-                                            .values
+                                            .customVariations[
+                                                cubit.selectedVariation]
+                                            .sizes
                                             ?.length ??
                                         0,
                                     shrinkWrap: true,
@@ -312,7 +301,13 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                               ],
                             ),
                           ),
-                        if (cubit.properties[2].isExist)
+                        if (cubit.customVariations.isNotEmpty &&
+                            (cubit.customVariations[cubit.selectedVariation]
+                                    .materials?.isNotEmpty ??
+                                false) &&
+                            cubit.customVariations[cubit.selectedVariation]
+                                    .materials?[0] !=
+                                null)
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Column(
@@ -343,14 +338,9 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                             horizontal: 5),
                                         child: Text(
                                           cubit
-                                                  .product
-                                                  .data
-                                                  ?.avaiableProperties?[cubit
-                                                          .properties[2]
-                                                          .propertyIndex ??
-                                                      2]
-                                                  .values?[index]
-                                                  .value ??
+                                                  .customVariations[
+                                                      cubit.selectedVariation]
+                                                  .materials?[index] ??
                                               '-----',
                                           style: GoogleFonts.cairo().copyWith(
                                             fontWeight: FontWeight.bold,
@@ -361,13 +351,9 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                                       );
                                     },
                                     itemCount: cubit
-                                            .product
-                                            .data
-                                            ?.avaiableProperties?[cubit
-                                                    .properties[2]
-                                                    .propertyIndex ??
-                                                2]
-                                            .values
+                                            .customVariations[
+                                                cubit.selectedVariation]
+                                            .materials
                                             ?.length ??
                                         0,
                                     shrinkWrap: true,

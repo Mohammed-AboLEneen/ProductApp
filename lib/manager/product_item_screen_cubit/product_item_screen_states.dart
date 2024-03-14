@@ -11,3 +11,5 @@ class GetProductItemFailureState extends ProductItemScreenStates {
 }
 
 class GetProductItemSuccessState extends ProductItemScreenStates {}
+
+class ChangeVariationState extends ProductItemScreenStates {}
