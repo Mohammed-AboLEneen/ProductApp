@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:splash_app/models/product_screen_item_model.dart';
 
 import '../models/product_model.dart';
 import '../screens/product_item_screen.dart';
@@ -8,7 +9,7 @@ import '../screens/product_item_screen.dart';
 class GridViewItem extends StatelessWidget {
   const GridViewItem({super.key, required this.product});
 
-  final Product product;
+  final ProductScreenItemModel product;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class GridViewItem extends StatelessWidget {
               child: SlideTransition(
                   position: animation.drive(Tween<Offset>(
                       begin: const Offset(0, -1), end: Offset.zero)),
-                  child: ProductItemScreen(id: '${product.data?.id}')));
+                  child: ProductItemScreen(id: product.id)));
         }));
       },
       child: Padding(
@@ -35,9 +36,7 @@ class GridViewItem extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: CachedNetworkImage(
-                  imageUrl: product.data!.variations?[0]
-                          .productVarientImages?[0].imagePath ??
-                      '',
+                  imageUrl: product.image,
                   errorWidget: (context, url, error) => const Icon(
                     Icons.error,
                     color: Colors.white,
@@ -55,7 +54,7 @@ class GridViewItem extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 10, right: 5),
                       child: Text(
-                        '${product.data!.name}',
+                        product.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.cairo(color: Colors.white),
@@ -66,7 +65,7 @@ class GridViewItem extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundImage: CachedNetworkImageProvider(
-                    '${product.data!.brandImage}',
+                    product.brandImage,
                   ),
                 )
               ],
@@ -77,7 +76,7 @@ class GridViewItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'EPG ${product.data!.variations?[0].price}',
+                  'EPG ${product.price}',
                   style: GoogleFonts.cairo().copyWith(
                       color: Colors.white,
                       fontSize: 15,
