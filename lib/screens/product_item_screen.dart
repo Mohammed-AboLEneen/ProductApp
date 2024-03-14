@@ -363,6 +363,16 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                               ],
                             ),
                           ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        CustomExpensionPanelList(
+                          description: cubit.product.data?.description ??
+                              'There is no description',
+                        ),
+                        const SizedBox(
+                          height: 100,
+                        ),
                       ],
                     ),
                   ),
@@ -384,6 +394,60 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
           }
         },
         listener: (context, state) {},
+      ),
+    );
+  }
+}
+
+class CustomExpensionPanelList extends StatefulWidget {
+  final String description;
+
+  const CustomExpensionPanelList({super.key, required this.description});
+
+  @override
+  State<CustomExpensionPanelList> createState() =>
+      _CustomExpensionPanalListState();
+}
+
+class _CustomExpensionPanalListState extends State<CustomExpensionPanelList> {
+  bool Expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: ExpansionPanelList(
+        expansionCallback: (panelIndex, isExpanded) {
+          setState(() {
+            Expanded = isExpanded;
+            print(isExpanded);
+          });
+        },
+        children: [
+          ExpansionPanel(
+            isExpanded: Expanded,
+            backgroundColor: Colors.teal,
+            headerBuilder: (context, isExpanded) => ListTile(
+              title: Text(
+                'Description',
+                style: GoogleFonts.cairo()
+                    .copyWith(fontSize: 18, color: Colors.white),
+              ),
+              trailing: Icon(
+                isExpanded ? Icons.expand_less : Icons.expand_more,
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                widget.description ?? 'No Description',
+                style: GoogleFonts.cairo()
+                    .copyWith(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
