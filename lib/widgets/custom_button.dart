@@ -49,15 +49,12 @@ class CustomTextButton extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            text,
-            style: GoogleFonts.cairo().copyWith(
-                fontSize: textSize,
-                color: textColor,
-                fontWeight: FontWeight.w500),
-          ),
+        child: Text(
+          text,
+          style: GoogleFonts.cairo().copyWith(
+              fontSize: textSize,
+              color: textColor,
+              fontWeight: FontWeight.w500),
         ),
       ),
     );

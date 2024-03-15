@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomExpensionPanelList extends StatefulWidget {
-  final String description;
+  final Widget? content;
+  final Widget? header;
 
-  const CustomExpensionPanelList({super.key, required this.description});
+  const CustomExpensionPanelList({super.key, this.content, this.header});
 
   @override
   State<CustomExpensionPanelList> createState() =>
@@ -30,19 +31,16 @@ class _CustomExpensionPanalListState extends State<CustomExpensionPanelList> {
             isExpanded: Expanded,
             backgroundColor: Colors.teal,
             headerBuilder: (context, isExpanded) => ListTile(
-              title: Text(
-                'Description',
-                style: GoogleFonts.cairo()
-                    .copyWith(fontSize: 18, color: Colors.white),
-              ),
+              title: widget.header ??
+                  Text(
+                    'Description',
+                    style: GoogleFonts.cairo()
+                        .copyWith(fontSize: 18, color: Colors.white),
+                  ),
             ),
             body: Padding(
               padding: const EdgeInsets.all(15),
-              child: Text(
-                widget.description,
-                style: GoogleFonts.cairo()
-                    .copyWith(color: Colors.white, fontSize: 18),
-              ),
+              child: widget.content,
             ),
           )
         ],

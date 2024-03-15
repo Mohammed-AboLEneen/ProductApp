@@ -10,7 +10,7 @@ class SkelatonProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: mainColor,
+        backgroundColor: backgroundColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),

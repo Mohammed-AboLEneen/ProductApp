@@ -2,17 +2,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:splash_app/manager/cart_cubit/cart_cubit.dart';
+import 'package:splash_app/manager/cart_cubit/cart_states.dart';
 import 'package:splash_app/manager/product_item_screen_cubit/product_item_screen_cubit.dart';
+import 'package:splash_app/models/cart_item_model.dart';
+import 'package:splash_app/widgets/custom_button.dart';
 
 import '../constents.dart';
 import '../manager/product_item_screen_cubit/product_item_screen_states.dart';
 import '../methods/hex_to_color.dart';
+import '../models/produect_variations.dart';
 import '../widgets/cached_image_view_item.dart';
+import '../widgets/color_listview.dart';
 import '../widgets/custom_expension_panal_list.dart';
 import '../widgets/failure_widget.dart';
+import '../widgets/materials_listview.dart';
+import '../widgets/sizes_listview.dart';
 
 class ProductItemScreen extends StatefulWidget {
   final String id;
@@ -63,7 +72,7 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
             ));
           } else {
             return Scaffold(
-              backgroundColor: mainColor,
+              backgroundColor: backgroundColor,
               body: SafeArea(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -230,40 +239,7 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                         ),
                         if (cubit.customVariations.isNotEmpty &&
                             cubit.customVariations[0].color != null)
-                          Container(
-                            height: 50,
-                            margin: const EdgeInsets.only(top: 10),
-                            child: ListView.builder(
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    cubit.changeVariation(index);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    child: CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor:
-                                          cubit.selectedVariation == index
-                                              ? Colors.teal
-                                              : Colors.grey.withOpacity(.7),
-                                      child: CircleAvatar(
-                                        radius: 17,
-                                        backgroundColor: hexToColor(cubit
-                                                .customVariations[index]
-                                                .color ??
-                                            '000000'),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemCount: cubit.customVariations.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                            ),
-                          ),
+                          ColorsListView(cubit: cubit),
                         if (cubit.customVariations.isNotEmpty &&
                             (cubit.customVariations[cubit.selectedVariation]
                                     .sizes?.isNotEmpty ??
@@ -271,74 +247,7 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                             cubit.customVariations[cubit.selectedVariation]
                                     .sizes?[0] !=
                                 null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Select Size',
-                                    style: GoogleFonts.cairo()
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                  child: ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          if (cubit.selectedSize != index) {
-                                            setState(() {
-                                              cubit.selectedSize = index;
-                                            });
-                                          }
-                                        },
-                                        child: AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 600),
-                                          decoration: BoxDecoration(
-                                              color: cubit.selectedSize == index
-                                                  ? Colors.teal
-                                                  : Colors.grey.withOpacity(.7),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 10),
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Text(
-                                            cubit
-                                                    .customVariations[
-                                                        cubit.selectedVariation]
-                                                    .sizes?[index] ??
-                                                '-----',
-                                            style: GoogleFonts.cairo().copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Colors.white.withOpacity(.85),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: cubit
-                                            .customVariations[
-                                                cubit.selectedVariation]
-                                            .sizes
-                                            ?.length ??
-                                        0,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                          SizesListView(cubit: cubit),
                         if (cubit.customVariations.isNotEmpty &&
                             (cubit.customVariations[cubit.selectedVariation]
                                     .materials?.isNotEmpty ??
@@ -346,85 +255,65 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
                             cubit.customVariations[cubit.selectedVariation]
                                     .materials?[0] !=
                                 null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Select Material',
-                                    style: GoogleFonts.cairo()
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                  child: ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          if (cubit.selectedMaterial != index) {
-                                            setState(() {
-                                              cubit.selectedMaterial = index;
-                                            });
-                                          }
-                                        },
-                                        child: AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 600),
-                                          decoration: BoxDecoration(
-                                              color: cubit.selectedMaterial ==
-                                                      index
-                                                  ? Colors.teal
-                                                  : Colors.grey.withOpacity(.7),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 10),
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Text(
-                                            cubit
-                                                    .customVariations[
-                                                        cubit.selectedVariation]
-                                                    .materials?[index] ??
-                                                '-----',
-                                            style: GoogleFonts.cairo().copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Colors.white.withOpacity(.85),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: cubit
-                                            .customVariations[
-                                                cubit.selectedVariation]
-                                            .materials
-                                            ?.length ??
-                                        0,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                          MaterialsListView(cubit: cubit),
                         const SizedBox(
                           height: 30,
                         ),
                         CustomExpensionPanelList(
-                          description: cubit.product.data?.description ??
-                              'There is no description',
+                          content: Text(
+                            cubit.product.data?.description ??
+                                'There is no description',
+                            style: GoogleFonts.cairo()
+                                .copyWith(color: Colors.white, fontSize: 18),
+                          ),
                         ),
                         const SizedBox(
-                          height: 100,
+                          height: 20,
                         ),
+                        BlocBuilder<CartCubit, CartCubitStates>(
+                            builder: (context, state) {
+                          return SizedBox(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * .7,
+                            child: CustomTextButton(
+                              text: chooseTextButtonCart(context,
+                                  cubit.product.data?.variations ?? []),
+                              textColor: Colors.white,
+                              buttonColor: mainColor.withOpacity(.8),
+                              topLeft: 10,
+                              bottomLeft: 10,
+                              bottomRight: 10,
+                              topRight: 10,
+                              onPressed: () {
+                                BlocProvider.of<CartCubit>(context).addItem(CartItemModel(
+                                    brandName:
+                                        cubit.product.data?.brandName ?? '',
+                                    productName: cubit.product.data?.name ?? '',
+                                    brandImage:
+                                        cubit.product.data?.brandImage ?? '',
+                                    image: cubit
+                                            .product
+                                            .data
+                                            ?.variations?[
+                                                cubit.selectedVariation]
+                                            .productVarientImages?[0]
+                                            .imagePath ??
+                                        '',
+                                    productVariation:
+                                        cubit.product.data?.variations?[cubit.selectedVariation].id.toString() ??
+                                            '',
+                                    quantity: cubit
+                                            .product
+                                            .data
+                                            ?.variations?[cubit.selectedVariation]
+                                            .quantity
+                                            .toString() ??
+                                        '',
+                                    price: cubit.product.data?.variations?[cubit.selectedVariation].price.toString() ?? ''));
+                              },
+                            ),
+                          );
+                        })
                       ],
                     ),
                   ),
@@ -437,4 +326,29 @@ class _ProductItemScreenState extends State<ProductItemScreen> {
       ),
     );
   }
+}
+
+String chooseTextButtonCart(context, List<Variations> variations) {
+  String text = '';
+
+  if (variations.isNotEmpty &&
+      BlocProvider.of<CartCubit>(context).items.isNotEmpty) {
+    BlocProvider.of<CartCubit>(context)
+        .items
+        .asMap()
+        .entries
+        .forEach((element) {
+      print(int.parse(element.value.productVariation));
+      if (int.parse(element.value.productVariation) ==
+          variations[element.key].id) {
+        text = 'Check This Item In Cart';
+      } else {
+        text = 'Add To Cart';
+      }
+    });
+  } else {
+    text = 'Add To Cart';
+  }
+
+  return text;
 }

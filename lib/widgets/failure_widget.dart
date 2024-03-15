@@ -17,7 +17,7 @@ class FailureWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainColor,
+      backgroundColor: backgroundColor,
       body: Center(
         child: Container(
           height: MediaQuery.sizeOf(context).height * .15,
